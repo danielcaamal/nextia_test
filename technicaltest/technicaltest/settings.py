@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 # Local apps
 LOCAL_APPS = [
+    'authentication_app',
 ]
 
 # Django apps
@@ -134,3 +135,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Cors configurations fog login with cookies
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
