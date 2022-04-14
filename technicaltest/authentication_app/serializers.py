@@ -45,13 +45,17 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         # Getting the password from the validated data
         password = validated_data.pop('password', None)
+        print(validated_data)
         
         # Password validation
         if password is not None:
             # Making the password hashable (default password hasher)
             instance.password = make_password(password)
         
-        # Updating the user
+        # Updating the instance user
+        instance.__dict__.update(**validated_data)
+        
+        # Saving the user
         instance.save()
         
         # Returning the instance
