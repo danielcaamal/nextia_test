@@ -6,7 +6,6 @@ from datetime import datetime
 import os
 import pandas as pd
 from psycopg2 import connect
-import requests
 
 # Set the environment variable for this script to run
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "technicaltest.settings")
@@ -37,12 +36,12 @@ def main():
         with conn.cursor() as cursor:
             
             # Verify first start
-            print('Verify if the table users is empty')
             cursor.execute("SELECT * FROM authentication_app_user")
             res = cursor.fetchall()
             if res:
                 print('Migration already done')
                 return
+            print('Verify if the table users is empty')
             
             datenow = datetime.now().isoformat()
             print('Creating the admin user...')
