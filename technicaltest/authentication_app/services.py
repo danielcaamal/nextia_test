@@ -1,6 +1,7 @@
 # Python
 import datetime
 import jwt
+import os
 
 # Django
 from django.shortcuts import get_object_or_404
@@ -31,7 +32,7 @@ def generate_jwt_token(user: User):
         'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
         'iat': datetime.datetime.utcnow()
     }
-    token = jwt.encode(payload, 'SECRET_KEY', algorithm='HS256').decode('utf-8')
+    token = jwt.encode(payload, os.environ.get("SECRET_KEY", default='SECRET_KEY'), algorithm='HS256').decode('utf-8')
     
     # Setting the response
     response = Response()
@@ -66,7 +67,7 @@ def check_authentication(request):
     # Decode the token, if not valid raise an exception
     payload = None
     try:
-        payload = jwt.decode(token, 'SECRET_KEY', algorithms=['HS256'])
+        payload = jwt.decode(token, os.environ.get("SECRET_KEY", default='SECRET_KEY'), algorithms=['HS256'])
     except Exception as err:
         raise AuthenticationFailed('Unauthenticated')
     
