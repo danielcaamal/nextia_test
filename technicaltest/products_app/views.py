@@ -1,6 +1,8 @@
 # Django REST Framework
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
 
 # Local imports
 from authentication_app.services import check_authentication
@@ -19,7 +21,7 @@ class ProductsView(APIView):
         
         if ids:
             # Return the products given ids
-            products = user.products.filter(id__in=ids)
+            products = user.products.filter(id__in=ids).order_by('id')
         else:
             # Return all the user's products
             products = user.products.all()
@@ -45,7 +47,7 @@ class ProductsView(APIView):
         serializer.save(user=user)
         
         # Return the created product
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
@@ -57,7 +59,7 @@ class ProductsDetailView(APIView):
         user = check_authentication(request)
         
         # Get the product
-        product = user.products.get(id=pk)
+        product = get_object_or_404(user.products, id=pk)
         
         # Serialize the product
         serializer = ProductSerializer(product)
@@ -66,15 +68,15 @@ class ProductsDetailView(APIView):
         return Response(serializer.data)
     
     # Update the product
-    def patch(self, request, id):
+    def patch(self, request, pk):
         # Check JWT authentication
         user = check_authentication(request)
         
         # Get the product
-        product = user.products.get(id=id)
+        product = get_object_or_404(user.products, id=pk)
         
         # Serialize the request data
-        serializer = ProductSerializer(product, data=request.data)
+        serializer = ProductSerializer(product, data=request.data, partial=True)
         
         # Validate the request data
         serializer.is_valid(raise_exception=True)
@@ -86,15 +88,15 @@ class ProductsDetailView(APIView):
         return Response(serializer.data)
     
     # Delete the product
-    def delete(self, request, id):
+    def delete(self, request, pk):
         # Check JWT authentication
         user = check_authentication(request)
         
         # Get the product
-        product = user.products.get(id=id)
+        product = get_object_or_404(user.products, id=pk)
         
         # Delete the product
         product.delete()
         
         # Return the user
-        return Response(user.id)
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
