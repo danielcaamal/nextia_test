@@ -1,7 +1,3 @@
-# Python
-import datetime
-import jwt
-
 # Django
 from django.contrib.auth.hashers import check_password
 
@@ -63,10 +59,16 @@ class LogoutView(APIView):
     def post(self, request):
         # Delete the cookie
         response = Response()
-        response.delete_cookie('jwt')
         
-        # Setting message in the response
-        response.data = {'message': 'Logged out'}
+        # Getting the cookie
+        token = request.COOKIES.get('jwt', None)
+        
+        # Deleting the cookie if exists and seeting message in the response
+        if token:
+            response.delete_cookie('jwt')
+            response.data = {'message': 'Logged out'}
+        else:
+            response.data = {'message': 'Already logged out'}
         
         # Return the response
         return response
