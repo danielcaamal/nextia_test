@@ -24,7 +24,7 @@ class ProductsView(APIView):
             products = user.products.filter(id__in=ids).order_by('id')
         else:
             # Return all the user's products
-            products = user.products.all()
+            products = user.products.all().order_by('id')
         
         # Serialize the products
         serializer = ProductSerializer(products, many=True)
