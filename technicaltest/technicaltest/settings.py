@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Local apps
 LOCAL_APPS = [
     'authentication_app',
+    'products_app'
 ]
 
 # Django apps
