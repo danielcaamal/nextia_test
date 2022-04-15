@@ -53,4 +53,4 @@ class UserViewTest(APITestCase):
         The user should be able to delete own account
         '''
         response = self.client.delete(reverse('user'))
-        self.assertContains(response, "User deleted", status_code=200)
+        self.assertTrue(response.status_code == 204)

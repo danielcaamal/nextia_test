@@ -2,6 +2,7 @@
 from django.contrib.auth.hashers import check_password
 
 # Django REST Framework
+from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -113,4 +114,4 @@ class UserView(APIView):
         user.delete()
         
         # Return message in the response
-        return Response({'message': 'User deleted'})
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
